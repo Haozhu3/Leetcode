@@ -1,0 +1,42 @@
+def updateBoard(self, board, click):
+        """
+        :type board: List[List[str]]
+        :type click: List[int]
+        :rtype: List[List[str]]
+        """
+        q = []
+        q.append(click)
+        visited = {}
+        while q:
+            cur = q.pop(0)
+            if (cur[0],cur[1]) in visited:
+                continue
+            visited[(cur[0],cur[1])] = 1
+            if board[cur[0]][cur[1]] == 'M':
+                board[cur[0]][cur[1]] = 'X'
+                return board
+            else:
+                ct = 0
+                x = cur[0] - 1
+                y = cur[1] - 1
+                for i in range(3):
+                    for j in range(3):
+                        if ((x + i) < 0) or ((x + i) >= len(board)) or ((y + j) < 0) or ((y + j) >= len(board[0])):
+                            continue
+                        elif board[x + i][y + j] == 'M':
+                            ct += 1
+                if ct > 0:
+                    board[cur[0]][cur[1]] = str(ct)
+                elif ct == 0:
+                    board[cur[0]][cur[1]] = 'B'
+                    x = cur[0] - 1
+                    y = cur[1] - 1
+                    for i in range(3):
+                        for j in range(3):
+                            if ((x + i) < 0) or ((x + i) >= len(board)) or ((y + j) < 0) or ((y + j) >= len(board[0])):
+                                continue
+                            if (x + i) == cur[0] and (y + j) == cur[1]:
+                                continue
+                            else:
+                                q.append([x + i, y + j])
+        return board
