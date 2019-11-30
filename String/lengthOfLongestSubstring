@@ -1,0 +1,14 @@
+def lengthOfLongestSubstring(self, s):
+    dct = {}
+    cur_max, total_max, i, start = 0,0,0,0
+    while i < len(s):
+        if s[i] in dct and dct[s[i]] >= start:
+            total_max = max(cur_max,total_max)
+            #update cur_max as new
+            cur_max = i - dct[s[i]]
+            start = dct[s[i]] + 1
+        else:
+            cur_max += 1
+        dct[s[i]] = i
+        i += 1
+    return max(cur_max,total_max)
