@@ -1,0 +1,33 @@
+class Solution(object):
+from collections import defaultdict
+    def ladderLength(self, beginWord, endWord, wordList):
+        """
+        :type beginWord: str
+        :type endWord: str
+        :type wordList: List[str]
+        :rtype: int
+        """
+        if endWord not in wordList or beginWord not in wordList:
+            return 0
+        else:
+            neighbours = defaultdict(list)
+            leng = len(wordList[0])
+            for word in wordList:
+                for i in range(leng):
+                    neighbours[word[:i] + '*' + word[(i + 1):]].append(word)
+            visited = {}
+            q = []
+            ct = 0
+            q.append([beginWord,0])
+            while len(q) > 0:
+                cur,level = q.pop(0)
+                if cur in visited:
+                    continue
+                visited[cur] = 1
+                if cur == endWord:
+                    return level
+                ct += 1
+                for i in range(leng):
+                    for word in neighbours[cur[:i] + '*' + cur[(i + 1):]]:
+                                           q.append([word,ct])
+            return 0
