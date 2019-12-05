@@ -1,5 +1,5 @@
-class Solution(object):
 from collections import defaultdict
+class Solution(object):
     def ladderLength(self, beginWord, endWord, wordList):
         """
         :type beginWord: str
@@ -7,7 +7,7 @@ from collections import defaultdict
         :type wordList: List[str]
         :rtype: int
         """
-        if endWord not in wordList or beginWord not in wordList:
+        if endWord not in wordList:
             return 0
         else:
             neighbours = defaultdict(list)
@@ -15,19 +15,26 @@ from collections import defaultdict
             for word in wordList:
                 for i in range(leng):
                     neighbours[word[:i] + '*' + word[(i + 1):]].append(word)
-            visited = {}
-            q = []
+            begin_visited = {}
+            end_visited = {}
+            begin_q = []
+            end_q = []
             ct = 0
-            q.append([beginWord,0])
-            while len(q) > 0:
-                cur,level = q.pop(0)
-                if cur in visited:
-                    continue
-                visited[cur] = 1
-                if cur == endWord:
-                    return level
+            begin_q.append([beginWord,0])
+            end_q.append([endWord,0])
+            while len(begin_q) > 0 and len(end_q) > 0:
+                begin_cur,begin_level = begin_q.pop(0)
+                end_cur,end_level = end_q.pop(0)
+                if begin_cur in end_visited or end_cur in begin_visited:
+                    return (begin_level * 2 - 1)
+                if begin_cur not in begin_visited:
+                    begin_visited[begin_cur] = 1
+                if end_cur not in end_visited:
+                    end_visited[end_cur] = 1
                 ct += 1
                 for i in range(leng):
-                    for word in neighbours[cur[:i] + '*' + cur[(i + 1):]]:
-                                           q.append([word,ct])
+                    for word in neighbours[begin_cur[:i] + '*' + begin_cur[(i + 1):]]:
+                                           begin_q.append([word,ct])
+                    for word in neighbours[end_cur[:i] + '*' + end_cur[(i + 1):]]:
+                                           end_q.append([word,ct])      
             return 0
